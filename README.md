@@ -6,7 +6,7 @@
 
 ### ABOUT THE PROJECT
 
-## COMING SOON
+## COMING SOON TO GITHUB
 
 ### FILE DESCRIPTIONS
 * **sfmlApp:**  Implements `main()` and the abstract app
