@@ -1,0 +1,30 @@
+@images
+paletteicon.png		palette
+axis6.png			axis6
+axis8.png			axis8
+blobbyink.png		inkyBrush
+calligbrush.png		calligBrush
+circlebrush.png		circleRoll
+doubleoutl.png		doubleOutline
+hexagon.png			hexagonRoll
+regularbrush.png	regularBrush
+starbrush.png		starRoll
+trianglebrush.png	triangleRoll
+gradient.png		gradient
+sliderhandle.png	sliderHandle
+arrowicon.png		arrow
+pinwheel.png		pinwheel
+paintbucket.png		bucket
+
+
+#repeated
+paneedge.png		edges		repeat
+
+@fonts
+Monaco.ttf		debug
+RollingNoOne-ExtraBold.otf		userName
+
+@sounds
+savefile.mp3	save
+
+
