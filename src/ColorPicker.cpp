@@ -8,7 +8,7 @@
 
 #include "mirrorpaint.hpp"
 
-ColorPicker::ColorPicker (vecf pos, const Texture& tx)
+void ColorPicker::setup (vecF pos)
 {
 	anchorPos = pos;
 	
@@ -23,34 +23,48 @@ ColorPicker::ColorPicker (vecf pos, const Texture& tx)
 	brightnessSpectrum.appendPt(pos + vecf(33, 303));
 	brightnessSpectrum.appendPtC(pos + vecf(33, 3), Color::White);
 	
-	// inexplicable problems with img setting no colors: temp using State
-	//		img.create(360 * 3, 300, Color::Black);
-	//		forFloat(360) {
-	//			forFloatJ(100) {
-	//				Color c = randomColor(); //hsbToRgb(i, j, 100.f);//min(brightness, 100));
-	//				img.setPixel(i * 3, j * 3, Color::Black);
-	//				img.setPixel(i * 3, j * 3 + 1, c);
-	//				img.setPixel(i * 3, j * 3 + 2, c);
-	//				img.setPixel(i * 3 + 1, j * 3, c);
-	//				img.setPixel(i * 3 + 1, j * 3 + 1, c);
-	//				img.setPixel(i * 3 + 1, j * 3 + 2, c);
-	//				img.setPixel(i * 3 + 2, j * 3, c);
-	//				img.setPixel(i * 3 + 2, j * 3 + 1, c);
-	//				img.setPixel(i * 3 + 2, j * 3 + 2, c);
-	//			}
-	//		}
-	//		tx.loadFromImage(img);
-	//		refreshImage(100);
-	//		colorsSprite.setTexture(tx);
+	zimg.create(360 * 3, 300, Color::Transparent);
+	tx.loadFromImage(zimg);
+	refreshImage(100);
+	colorsSprite.setTexture(tx);
 	colorsSprite.sP(pos + vecf(brightnessSpectrum.getBounds().width + 6, 3));
 	
-	slider = Sprite(tx);
+	slider = Sprite(gTexture("sliderHandle"));
 	centerOrigin(slider);
-	slider.sRot(90);
+	slider.setRotation(90);
 	slider.sP(brightnessSpectrum.getBounds().left + brightnessSpectrum.getBounds().width / 2,
 			  brightnessSpectrum.getBounds().top);
 	
 	deactivate();
+}
+
+void ColorPicker::refreshImage (float brightness)
+{
+	if (brightness < 0)
+		return;
+	
+	forNum (360) {
+		forNumJ (100)  {
+			Color c = hsbToRgb(i, j, clamp(brightness, 0.f, 100.f));
+			zimg.setPixel(i * 3, j * 3, c);
+			zimg.setPixel(i * 3, j * 3 + 1, c);
+			zimg.setPixel(i * 3, j * 3 + 2, c);
+			zimg.setPixel(i * 3 + 1, j * 3, c);
+			zimg.setPixel(i * 3 + 1, j * 3 + 1, c);
+			zimg.setPixel(i * 3 + 1, j * 3 + 2, c);
+			zimg.setPixel(i * 3 + 2, j * 3, c);
+			zimg.setPixel(i * 3 + 2, j * 3 + 1, c);
+			zimg.setPixel(i * 3 + 2, j * 3 + 2, c);
+		}
+	}
+	tx.update(zimg);
+}
+
+float ColorPicker::recalcBrightness (int x, int y, vecf cofs)
+{
+	auto val = min(updateSlider(x, y, cofs), 100.f);
+	refreshImage(val);
+	return val;
 }
 
 void ColorPicker::draw (RenderTarget &target, RenderStates states) const

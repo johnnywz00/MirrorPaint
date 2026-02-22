@@ -1,22 +1,24 @@
 /*
--thickness slider does not start out at correct scale on program start
--hexagons are not centered/symmetric
+ - textbox for reloading pics to work on
+ - more undo layers
+ - thumbnails of mirrors could be stuck together to make tile art
+ - colordev func that stores the last val used and stays within a range of it (static stored in the func)
+
+ - thickness slider does not start out at correct scale on program start
+ - hexagons are not centered/symmetric
  
  * make splineDraw work properly with bisections
+
+ - auto paint/randmotion
+ - HeartShape
+ - bulldozers/roll stamp drawing
+ - center orig of callig?
+ - textbox for pinwheel arms
+ - pixel blend option
+
  //effects like twined strings could be accomplished by drawing a temporary one-pix line for the duration of a stroke, and rendering the twines after the stroke has finished. same for the original idea of brush editor/pixels in a line, and other forms of periodic custom brushes
- 
-//auto paint/randmotion
-//slider labels?
-//HeartShape
-
-//bulldozers/roll stamp drawing
-//center orig of callig?
-
-//textbox for pinwheel arms
-//pixel blend option
-
- 
  */
+
 #ifndef MIRRORDRAW_H
 #define MIRRORDRAW_H
 
@@ -66,9 +68,9 @@ private:
 
 	void reloadRegions (AxisPicker&);
 	
-	bool checkBrushButtonsForClick (int x, int y);
-	
 	bool checkSlidersForClick (int x, int y);
+	
+	bool checkBrushButtonsForClick (int x, int y);
 	
 	void deactivateAll ()
 	{
@@ -82,6 +84,8 @@ private:
 	void setOutlineThickness (float thk) { outlineThickness = thk; }
 	
 	void setColorDev (float dev) { colorDev = dev; }
+	
+	void toggleColorDevFunc ();
 	
 	vector<vecf> getMirroredPts (float x, float y);
 	vector<vecf> getMirroredPts (const vecf& v) { return getMirroredPts(v.x, v.y); }
@@ -128,39 +132,8 @@ private:
 	
 	void clearCanvas ();
 	
-	void performUndo ();
-	
 	void saveCanvasToDiskFile();
 		
-
-	void recalcBrightness (int x, int y, vecf cofs)
-	{
-		auto val = colorPicker.updateSlider(mouseVec.x, mouseVec.y, clickOffset);
-		if (val >= 0) {
-			curBrightness = val;
-			refreshImage(curBrightness);
-		}
-	}
-	
-	void refreshImage (float brightness)
-	{
-		forFloat(360) {
-			forFloatJ(100) {
-				Color c = hsbToRgb(i, j, min(brightness, 100.f));
-				img.setPixel(i * 3, j * 3, c);
-				img.setPixel(i * 3, j * 3 + 1, c);
-				img.setPixel(i * 3, j * 3 + 2, c);
-				img.setPixel(i * 3 + 1, j * 3, c);
-				img.setPixel(i * 3 + 1, j * 3 + 1, c);
-				img.setPixel(i * 3 + 1, j * 3 + 2, c);
-				img.setPixel(i * 3 + 2, j * 3, c);
-				img.setPixel(i * 3 + 2, j * 3 + 1, c);
-				img.setPixel(i * 3 + 2, j * 3 + 2, c);
-			}
-		}
-		tx.update(img);
-	}
-	
 
 	ColorPicker				colorPicker;
 	AxisPicker				axis6Picker
@@ -172,6 +145,7 @@ private:
 							, axis6Sprite
 							, axis8Sprite
 							, paletteSprite
+							, saveSprite
 							, leftEdge
 							, rightEdge
 							, topEdge
@@ -182,16 +156,16 @@ private:
 							, axisButton6
 							, axisButton8
 							, paletteButton
-							, saveButton
 							, clearScreenButton
-							, thicknessIndicator
 							, brButtonHilite
 							, bkgdColorButton
 							, outlineColorButton
 	;
 	vector<BrushButton>		brushButtons;
 	vector<Slider>			sliders;
-	Text					artistName;
+	Text					artistName
+							, clearBtnTxt
+	;
 	
 	RectangleShape*			whichColorRect;
 	Sprite					whichColorArrow;
@@ -225,13 +199,6 @@ private:
 	uint					saveID = 1;
 	uint 					colorDev = 3;
 	bool					drawing;
-	bool					chooseCanvasColor = false;
-	bool					chooseSecondaryColor = false;
-	
-	Image img; // remove if getting ColorPicker to manage own colors
-	Texture tx; // " "
-
-
 }; //end class State
 
 #endif

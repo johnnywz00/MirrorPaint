@@ -9,9 +9,9 @@
 #include "mirrorpaint.hpp"
 
 AxisPicker::RegionSelector::RegionSelector (float ax, float degItvl, AxisPicker* parent, ClockDir cd)
-: axis(ax)
-, degInterval(degItvl)
-, clockDir(cd)
+	: axis(ax)
+	, degInterval(degItvl)
+	, clockDir(cd)
 {
 	setPoints(parent->finalPos);
 	setLines();
@@ -63,7 +63,7 @@ AxisPicker::AxisSelector::AxisSelector (float deg, vecf pos)
 	r.setOrigin(0, r.gLB().height / 2);
 	r.setFillColor(Color(0, 0, 30));
 	r.sP(pos);
-	r.sRot(axis);
+	r.setRotation(axis);
 }
 
 AxisPicker::AxisPicker (vecf auxPos, float degInterval, State* app_)
@@ -88,12 +88,8 @@ AxisPicker::AxisPicker (vecf auxPos, float degInterval, State* app_)
 	for (float d = 90; d < 450; d += degInterval) {
 		AxisSelector as {d, finalPos};
 		RegionSelector rs {czdg(d), degInterval, this};
-		//			if (int(degInterval) == 45)
-		//				rs.isSelected = true;
 		as.ccw = rs;
 		rs = {czdg(d), degInterval, this, clockwise};
-		//			if (int(degInterval) == 45)
-		//				rs.isSelected = true;
 		as.cw = rs;
 		axes.push_back(as);
 		
@@ -116,7 +112,6 @@ void AxisPicker::selectAxis (AxisSelector& a)
 	}
 	selectRegion(a.cw);
 	selectRegion(a.ccw);
-	
 }
 
 void AxisPicker::selectAll ()

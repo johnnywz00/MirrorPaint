@@ -15,6 +15,7 @@ sliderhandle.png	sliderHandle
 arrowicon.png		arrow
 pinwheel.png		pinwheel
 paintbucket.png		bucket
+saveicon.png		saveIcon
 
 
 #repeated
@@ -23,6 +24,7 @@ paneedge.png		edges		repeat
 @fonts
 Monaco.ttf		debug
 RollingNoOne-ExtraBold.otf		userName
+Eurostile		slider
 
 @sounds
 savefile.mp3	save

@@ -87,8 +87,8 @@ public:
 class Slider : public Drawable
 {
 public:
-	Slider (string nam, const Texture& tx, vecf pos, float mn, float mx, float defval, const function<void(float)>& f)
-		: handle(tx)
+	Slider (string nam, vecf pos, float mn, float mx, float defval, const function<void(float)>& f)
+		: handle(gTexture("sliderHandle"))
 		, name(nam)
 		, minVal(mn)
 		, maxVal(mx)
@@ -102,16 +102,22 @@ public:
 		centerOrigin(handle);
 		handle.sP((((defaultVal - minVal) / (maxVal - minVal)) * track.getSize().x) + track.gP().x, track.gP().y);
 		handle.setScale(.66, .66);
+		
+		label = Text(nam, gFont("slider"), 14);
+		label.setPosition(track.gP() + vecF(0, 3));
+		label.setFillColor(Color(0, 0, 0, 150));
 	}
 	
 	void draw (RenderTarget& target, RenderStates states) const
 	{
 		target.draw(track);
+		target.draw(label);
 		target.draw(handle);
 	}
 	
 	Sprite					handle;
 	RectangleShape			track;
+	Text					label;
 	function<void(float)> 	func;
 	string 					name;
 	float					minVal

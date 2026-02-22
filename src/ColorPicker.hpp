@@ -14,9 +14,11 @@
 class ColorPicker : public Drawable
 {
 public:
-	ColorPicker () { }
+	void setup (vecf pos);
 	
-	ColorPicker (vecf pos, const Texture& tx);
+	void refreshImage (float brightness);
+	
+	float recalcBrightness (int x, int y, vecf cofs);
 	
 	void draw (RenderTarget &target, RenderStates states) const;
 	
@@ -47,7 +49,7 @@ public:
 	RectangleShape	pane;
 	VertexArray		brightnessSpectrum {TriangleStrip};
 	Texture			tx;
-	Image			img;
+	ZImage			zimg;
 	vecf			anchorPos;
 	bool			isActive = false;
 };
