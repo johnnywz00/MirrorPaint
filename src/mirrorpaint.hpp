@@ -1,10 +1,10 @@
 /*
  - textbox for reloading pics to work on
  - more undo layers
+ - periodic squares
  - thumbnails of mirrors could be stuck together to make tile art
  - colordev func that stores the last val used and stays within a range of it (static stored in the func)
 
- - thickness slider does not start out at correct scale on program start
  - hexagons are not centered/symmetric
  
  * make splineDraw work properly with bisections

@@ -99,6 +99,7 @@ public:
 		track.setOrigin(0, track.gLB().height / 2);
 		track.sP(pos);
 		track.setFillColor(Color::Black);
+		track.setScale(1, max(.333f, defaultVal / 3));
 		centerOrigin(handle);
 		handle.sP((((defaultVal - minVal) / (maxVal - minVal)) * track.getSize().x) + track.gP().x, track.gP().y);
 		handle.setScale(.66, .66);
