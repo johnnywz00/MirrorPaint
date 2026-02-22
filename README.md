@@ -3,6 +3,7 @@
 ## C++/SFML mirrored painting program
 
 <img width="1728" height="1117" alt="Screenshot 2026-02-12 at 5 43 14 PM" src="https://github.com/user-attachments/assets/c55ede89-0ba5-4a97-bc52-1db7b5f1cb38" />
+<img width="1728" height="1728" alt="161101621036863011" src="https://github.com/user-attachments/assets/d7a81e49-5be7-48a5-bf8f-85de43c64819" />
 
 ### ABOUT THE PROJECT
 
