@@ -24,7 +24,7 @@ paneedge.png		edges		repeat
 @fonts
 Monaco.ttf		debug
 RollingNoOne-ExtraBold.otf		userName
-Eurostile		slider
+"Tahoma Bold.ttf" slider
 
 @sounds
 savefile.mp3	save
