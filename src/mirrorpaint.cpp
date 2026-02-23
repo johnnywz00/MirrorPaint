@@ -221,25 +221,23 @@ bool State::handleTextEvent (Event& event)
 
 void State::onMouseDown (int x, int y)
 {
-	if (colorPicker.isActive) {
-		if (colorPicker.slider.gGB().contains(x, y)) {
-			draggingSlider = &colorPicker.slider;
-			clickOffset = colorPicker.slider.gP() - vecf(x, y);
-		}
-		
-		else if (colorPicker.brightnessSpectrum.getBounds().contains(x, y)) {
-			curBrightness = colorPicker.recalcBrightness(x, y, {0, 0});
-		}
-		
-		else if (colorPicker.colorsSprite.gGB().contains(x, y)) {
-			*(whichColor) = colorPicker.getColorAt(x, y, curBrightness);
-			whichColorRect->setFillColor(*(whichColor));
-			
-		}
-		
-		else if (colorPicker.pane.gGB().contains(x, y))
-			; // Don't draw on canvas
+	if (colorPicker.slider.gGB().contains(x, y)) {
+		draggingSlider = &colorPicker.slider;
+		clickOffset = colorPicker.slider.gP() - vecf(x, y);
 	}
+	
+	else if (colorPicker.brightnessSpectrum.getBounds().contains(x, y)) {
+		curBrightness = colorPicker.recalcBrightness(x, y, {0, 0});
+	}
+	
+	else if (colorPicker.colorsSprite.gGB().contains(x, y)) {
+		*(whichColor) = colorPicker.getColorAt(x, y, curBrightness);
+		whichColorRect->setFillColor(*(whichColor));
+		
+	}
+	
+	else if (colorPicker.pane.gGB().contains(x, y))
+		; // Don't draw on canvas
 	
 	else if (axis6Picker.pane.gGB().contains(x, y)) {
 		if (hyp(axis6Picker.allCircle.gP(), vecf(x, y)) < axis6Picker.allCircle.getRadius())

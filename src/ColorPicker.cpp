@@ -35,6 +35,10 @@ void ColorPicker::setup (vecF pos)
 	slider.sP(brightnessSpectrum.getBounds().left + brightnessSpectrum.getBounds().width / 2,
 			  brightnessSpectrum.getBounds().top);
 	
+	txt = Text("Press space bar to hide", gFont("slider"), 12);
+	txt.setOrigin(txt.gLB().width, txt.gLB().height);
+	txt.setPosition(pane.gP().x + pane.getSize().x, pane.gP().y - 4);
+	txt.setFillColor(Color(0, 0, 0, 130));
 	deactivate();
 }
 
@@ -75,15 +79,18 @@ void ColorPicker::draw (RenderTarget &target, RenderStates states) const
 	target.draw(brightnessSpectrum);
 	target.draw(colorsSprite);
 	target.draw(slider);
+	target.draw(txt);
 }
 
 void ColorPicker::moveAll (vecf newPos)
 {
 	vecf sliderDif = slider.gP() - pane.gP();
 	vecf paletteDif = colorsSprite.gP() - pane.gP();
+	vecf txtDif = txt.gP() - pane.gP();
 	pane.sP(newPos);
 	slider.sP(newPos + sliderDif);
 	colorsSprite.sP(newPos + paletteDif);
+	txt.sP(newPos + txtDif);
 }
 
 float ColorPicker::updateSlider (int x, int y, vecf cofs)

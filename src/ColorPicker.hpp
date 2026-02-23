@@ -47,6 +47,7 @@ public:
 					, slider
 	;
 	RectangleShape	pane;
+	Text			txt;
 	VertexArray		brightnessSpectrum {TriangleStrip};
 	Texture			tx;
 	ZImage			zimg;
