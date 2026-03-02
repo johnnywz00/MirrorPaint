@@ -5,6 +5,28 @@
 
 void State::onCreate ()
 {
+	splashSpr.setTexture(gTexture("splash"));
+	centerOrigin(splashSpr);
+	splashSpr.setPosition(scrcx, scrcy);
+	splashTitle = Text("MirrorPaint", gFont("title"), 220);
+	centerOrigin(splashTitle);
+	splashTitle.setPosition(scrcx, scrcy - 10);
+	splashTitle.setFillColor(withAlpha(OLIVEGREEN, 200));
+	splashTitle.setOutlineThickness(7);
+	splashTitle.setOutlineColor(withAlpha(CHARCOAL, 200));
+	
+	anyKeyTxt = Text("John Ziegler, 2023-2026     johnnywz00@yahoo.com\n \n \n \n \n"
+					 "\t\t\t\t\t\t( Click or press any key )", gFont("title"), 26);
+	centerOrigin(anyKeyTxt);
+	anyKeyTxt.setPosition(scrcx, scrh - 50);
+	anyKeyTxt.setFillColor(OLIVEGREEN);
+	anyKeyTxt.setOutlineThickness(1);
+	anyKeyTxt.setOutlineColor(withAlpha(OLIVEGREEN, 120));
+	anyKeyBackdrop.setSize({anyKeyTxt.gGB().width + 20, anyKeyTxt.gGB().height + 20});
+	centerOrigin(anyKeyBackdrop);
+	anyKeyBackdrop.setPosition(anyKeyTxt.gP());
+	anyKeyBackdrop.setFillColor(withAlpha(CHARCOAL, 180));
+	
 	toolPane.setSize(vecf(scrw, 90));
 	toolPane.sP(0, scrh - 90);
 	toolPane.setFillColor(Color(152, 173, 100));
@@ -221,6 +243,11 @@ bool State::handleTextEvent (Event& event)
 
 void State::onMouseDown (int x, int y)
 {
+	if (showSplash) {
+		showSplash = false;
+		return;
+	}
+	
 	if (colorPicker.slider.gGB().contains(x, y)) {
 		draggingSlider = &colorPicker.slider;
 		clickOffset = colorPicker.slider.gP() - vecf(x, y);
@@ -376,6 +403,11 @@ void State::onMouseUp (int x, int y)
 
 void State::onKeyPress(Keyboard::Key k)
 {
+	if (showSplash) {
+		showSplash = false;
+		return;
+	}
+	
 	switch(k) {
 			
 		case Keyboard::Escape:
@@ -485,6 +517,15 @@ void State::update (const Time& time)
 void State::draw ()
 {
 	auto w = rwin;
+	
+	if (showSplash) {
+		w->draw(splashSpr);
+		w->draw(splashTitle);
+		w->draw(anyKeyBackdrop);
+		w->draw(anyKeyTxt);
+		return;
+	}
+	
 	w->draw(permCanvasSprite);
 	w->draw(canvasSprite);
 	

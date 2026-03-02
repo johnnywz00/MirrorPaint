@@ -16,15 +16,19 @@ arrowicon.png		arrow
 pinwheel.png		pinwheel
 paintbucket.png		bucket
 saveicon.png		saveIcon
+splash.png			splash
 
 
 #repeated
 paneedge.png		edges		repeat
 
 @fonts
-Monaco.ttf		debug
+Monaco.ttf			debug
 RollingNoOne-ExtraBold.otf		userName
-"Tahoma Bold.ttf" slider
+"Tahoma Bold.ttf" 	slider
+Shrewsbury.otf		title
+#VenturaRegular.otf		title
+#SnottBold.otf		title
 
 @sounds
 savefile.mp3	save

@@ -152,6 +152,7 @@ private:
 							, topEdge
 							, bottomEdge
 							, toolPaneEdge
+							, splashSpr
 	;
 	RectangleShape			toolPane
 							, axisButton6
@@ -161,11 +162,14 @@ private:
 							, brButtonHilite
 							, bkgdColorButton
 							, outlineColorButton
+							, anyKeyBackdrop
 	;
 	vector<BrushButton>		brushButtons;
 	vector<Slider>			sliders;
 	Text					artistName
 							, clearBtnTxt
+							, splashTitle
+							, anyKeyTxt
 	;
 	
 	RectangleShape*			whichColorRect;
@@ -200,6 +204,7 @@ private:
 	uint					saveID = 1;
 	uint 					colorDev = 3;
 	bool					drawing;
+	bool					showSplash = true;
 }; //end class State
 
 #endif
