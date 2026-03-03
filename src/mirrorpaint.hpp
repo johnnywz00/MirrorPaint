@@ -162,8 +162,8 @@ private:
 							, brButtonHilite
 							, bkgdColorButton
 							, outlineColorButton
-							, anyKeyBackdrop
 	;
+	RoundedRectangle		anyKeyBackdrop;
 	vector<BrushButton>		brushButtons;
 	vector<Slider>			sliders;
 	Text					artistName

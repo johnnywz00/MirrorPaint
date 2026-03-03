@@ -26,6 +26,7 @@ void State::onCreate ()
 	centerOrigin(anyKeyBackdrop);
 	anyKeyBackdrop.setPosition(anyKeyTxt.gP());
 	anyKeyBackdrop.setFillColor(withAlpha(CHARCOAL, 180));
+	anyKeyBackdrop.setRadius(17);
 	
 	toolPane.setSize(vecf(scrw, 90));
 	toolPane.sP(0, scrh - 90);
