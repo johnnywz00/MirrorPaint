@@ -36,7 +36,7 @@ void State::onCreate ()
 
 	gTexture("edges").setRepeated(true);
 	auto wid = gTexture("edges").getSize().x;
-	vector<Sprite*> edgeSprites {&rightEdge, &leftEdge, &topEdge, &bottomEdge, &toolPaneEdge};
+	Sprite* edgeSprites[] = {&rightEdge, &leftEdge, &topEdge, &bottomEdge, &toolPaneEdge};
 	for (Sprite* spr : edgeSprites) {
 		spr->setTexture(gTexture("edges"));
 		spr->setTextureRect(IntRect(0, 0, wid, scrw));
@@ -57,7 +57,7 @@ void State::onCreate ()
 	artistName.setOutlineThickness(1);
 	artistName.setOutlineColor(Color::Black);
 	artistName.setFillColor(AZURE75);
-	artistName.sP(scrw - 320, scrh - 50);
+	artistName.sP(scrw - 320, scrh - 70);
 	
 	float widgetX = 30;
 	pinwheelSprite.setTexture(gTexture("pinwheel"));
@@ -189,7 +189,15 @@ void State::onCreate ()
 
 	saveSprite.setTexture(gTexture("saveIcon"));
 	centerOrigin(saveSprite);
-	saveSprite.sP(scrw - 150, toolPaneMidY);
+	saveSprite.setScale(1, .68);
+	saveSprite.sP(scrw - 150, toolPaneMidY + 19);
+	
+	loadSprite.setTexture(gTexture("loadIcon"));
+	centerOrigin(loadSprite);
+	loadSprite.setScale(1, .68);
+	loadSprite.sP(scrw - 150, toolPaneMidY - 19);
+	
+	filenameTbox = Textbox(gFont("slider"), saveSprite.gP() + vecF(-248, -6), 16);
 		
 	float canvasHt = scrh - toolPane.gLB().height;
 	canvOrigin = {scrcx, canvasHt / 2};
@@ -247,6 +255,19 @@ void State::onMouseDown (int x, int y)
 	if (showSplash) {
 		showSplash = false;
 		return;
+	}
+	
+	if (filenameTbox.tbox.gGB().contains(x, y)) {
+		filenameTbox.setActive(true);
+		activeTbox = &filenameTbox;
+		return;
+	}
+	/* A click outside of the textbox always deactivates it in addition
+	 * to whatever else the click does
+	 */
+	else {
+		filenameTbox.setActive(false);
+		activeTbox = nullptr;
 	}
 	
 	if (colorPicker.slider.gGB().contains(x, y)) {
@@ -320,6 +341,9 @@ void State::onMouseDown (int x, int y)
 		
 		else if (saveSprite.gGB().contains(x, y))
 			saveCanvasToDiskFile();
+		
+		else if (loadSprite.gGB().contains(x, y))
+			loadCanvasFromSavedFile();
 		
 		else if (paletteButton.gGB().contains(x, y)) {
 			bool wasActive = colorPicker.isActive && whichColorRect == &paletteButton;
@@ -560,6 +584,8 @@ void State::draw ()
 	w->draw(clearScreenButton);
 	w->draw(clearBtnTxt);
 	w->draw(saveSprite);
+	w->draw(loadSprite);
+	w->draw(filenameTbox);
 	w->draw(artistName);
 	
 	w->draw(colorPicker);
@@ -769,43 +795,43 @@ void State::periodicDraw ()
 			if (curMode.type == starRoll) {
 				StarShape t;
 				t.setSize({lineThickness, lineThickness / 2.2f});
+				centerOrigin(t);
 				t.setFillColor(devColor);
 				t.setOutlineThickness(outlineThickness);
 				t.setOutlineColor(outlineColor);
 				t.setRotation(toPolar(newPts[i] - lastPts[i]).y);
-				centerOrigin(t);
 				t.sP(newPts[i]);
 				rtDraw(t);
 			}
 			else if (curMode.type == hexagonRoll) {
 				HexagonShape t;
 				t.setSize({lineThickness, lineThickness});
+				centerOrigin(t);
 				t.setFillColor(devColor);
 				t.setOutlineThickness(outlineThickness);
 				t.setOutlineColor(outlineColor);
 				t.setRotation(toPolar(newPts[i] - lastPts[i]).y);
-				centerOrigin(t);
 				t.sP(newPts[i]);
 				rtDraw(t);
 			}
 			else if (curMode.type == triangleRoll) {
 				TriangleShape t;
 				t.setSize({lineThickness, lineThickness});
+				centerOrigin(t);
 				t.setFillColor(devColor);
 				t.setOutlineThickness(outlineThickness);
 				t.setOutlineColor(outlineColor);
 				t.setRotation(toPolar(newPts[i] - lastPts[i]).y);
-				centerOrigin(t);
 				t.sP(newPts[i]);
 				rtDraw(t);
 			}
 			else if (curMode.type == circleRoll) {
 				CircleShape t;
 				t.setRadius(lineThickness / 2);
+				centerOrigin(t);
 				t.setFillColor(devColor);
 				t.setOutlineThickness(outlineThickness);
 				t.setOutlineColor(outlineColor);
-				centerOrigin(t);
 				t.sP(newPts[i]);
 				rtDraw(t);
 			}
@@ -937,12 +963,25 @@ void State::saveCanvasToDiskFile ()
 		fname = "/Users/johnwz/Desktop/" + folderName;
 		
 	}
-	else fname = (Resources::executingDir() / "").string();
-	fname += tS(saveID++) + tS(int(lineThickness)) + tS(int(curBrightness)) + tS(int(drawColor.r)) + tS(rand()) + ".png";
+	else fname = (Resources::executingDir() / "resources" / "saved" / "").string();
+	if (filenameTbox.getText().empty())
+		fname += tS(saveID++) + tS(int(lineThickness)) + tS(int(curBrightness)) + tS(int(drawColor.r)) + tS(rand()) + ".png";
+	else fname += filenameTbox.getText() + ".png";
 	temp.getTexture().copyToImage().saveToFile(fname);
 	gSound("save").play();
 }
 
+void State::loadCanvasFromSavedFile ()
+{
+	if (filenameTbox.getText().empty())
+		return;
+	clearCanvas();
+	Texture tx_;
+	tx_.loadFromFile((Resources::executingDir() / "resources" / "saved" / (stripExtension(filenameTbox.getText()) + ".png")).string());
+	Sprite spr_(tx_);
+	permRt.draw(spr_);
+	permRt.display();
+}
 
 
 

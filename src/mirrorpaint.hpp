@@ -1,6 +1,9 @@
 /*
- - textbox for reloading pics to work on
- - more undo layers
+  
+
+ - use spline functionality to do e.g. bamboo, other bisected segments
+ - instrucs
+ - more undo layers: queue
  - held key snaps brush to rectil. mvmt + 45s
  - periodic squares
  - thumbnails of mirrors could be stuck together to make tile art
@@ -133,8 +136,9 @@ private:
 	
 	void clearCanvas ();
 	
-	void saveCanvasToDiskFile();
-		
+	void saveCanvasToDiskFile ();
+	
+	void loadCanvasFromSavedFile ();
 
 	ColorPicker				colorPicker;
 	AxisPicker				axis6Picker
@@ -147,6 +151,7 @@ private:
 							, axis8Sprite
 							, paletteSprite
 							, saveSprite
+							, loadSprite
 							, leftEdge
 							, rightEdge
 							, topEdge
@@ -166,6 +171,7 @@ private:
 	RoundedRectangle		anyKeyBackdrop;
 	vector<BrushButton>		brushButtons;
 	vector<Slider>			sliders;
+	Textbox					filenameTbox;
 	Text					artistName
 							, clearBtnTxt
 							, splashTitle

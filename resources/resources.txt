@@ -16,6 +16,7 @@ arrowicon.png		arrow
 pinwheel.png		pinwheel
 paintbucket.png		bucket
 saveicon.png		saveIcon
+loadicon.png		loadIcon
 splash.png			splash
 
 
